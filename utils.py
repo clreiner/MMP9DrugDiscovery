@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, plot_confusion_matrix, ConfusionMatrixDisplay
 from sklearn.metrics import accuracy_score, roc_auc_score, precision_recall_fscore_support
+from rdkit import Chem
+from rdkit.Chem import Descriptors, Lipinski, AllChem, Draw
 
 def mannwhitney(DF, descriptor):
     # https://machinelearningmastery.com/nonparametric-statistical-significance-tests-in-python/
@@ -122,3 +124,38 @@ def evaluate(model, X_train, X_test, y_train, y_test, use_decision_function='yes
     print('Test scores:')
     print(f'Accuracy: {test_acc: .3f}, ROC/AUC: {test_roc_auc: .3f}')
     print(f'Precision: {test_precision: .3f}, Recall: {test_recall: .3f}, F1 Score: {test_fscore: .3f}')
+
+
+def view_molecules(dataframe, di, num_mols=6, title=None):
+    '''
+        Displays the 2D chemical structure of a number of randomly
+        selected molecules from the dataframe
+            Parameters:
+                    dataframe (DataFrame): dataframe containing column 'Name' with
+                                           ChEMBL IDs
+                    num_mols (int): default=6; must be divisible by 3; number of 
+                                     molecules to display
+                    di (dict): dictionary containing ChEMBL IDs as keys and canonical
+                                smiles as values
+                    title (str): default=None; title for the plot
+    '''
+    to_graph= dataframe.sample(num_mols)
+    to_graph = pd.DataFrame(to_graph['Name'])
+    to_graph['smiles'] = to_graph['Name'].map(di)
+    if num_mols%3 != 0:
+        print('num_mols must be divisible by 3')
+    else:
+        num_rows = int(num_mols/3)
+        fig, ax = plt.subplots(num_rows, 3, figsize=(15, (num_rows*5)), sharex=True, sharey=True)
+        axr = ax.ravel()
+        for i, mol in enumerate(list(to_graph['smiles'])):
+            m = Chem.MolFromSmiles(mol)
+            AllChem.Compute2DCoords(m)
+            img=Draw.MolToImage(m)
+            axr[i].imshow(img)
+            axr[i].axis('off')
+        plt.suptitle(title, fontsize=20)
+        plt.tight_layout()
+        figname=title[:5].lower() + '_' + title[-7:].lower() + '.png'
+        plt.savefig('images/' + figname)
+
