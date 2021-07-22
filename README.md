@@ -18,10 +18,10 @@ Data for this project was obtained from the ChEMBL database. The database contai
 
 I used 3 different model types and stacked them for a final model that gets approximately 84% of its predictions correct. 
 ![Important components of active compounds](images/imptfeatures.png)
-
+The top 2 rows are compound components that were important to predict activity in at least 2 models. The last row has the structures that were most important in the RandomForest (ring structure) and SVC models. The most important feature in the KNeighbors model was that compounds have four or more Nitrogens.
 
 ## Conclusion & Future Directions
 
 Running small molecule libraries through this model before screening them in vitro will greatly increase the percentage of active molecules that are screened. This will cut down the time and cost required to find potential new cancer treatments that will inhibit MMP9 activity and impede metastasis.
 
-There are 24 MMPs, some of which inhibit cancer and some that promote cancer. This has been an issue in previous attempts to use MMP inhibitors for cancer treatment; they weren't specific to the MMPs that promote cancer, so they affect both the good and bad MMPs have no net effect on the cancer progression. Thus, future drug candidates need to be specific against the MMPs that promote cancer. It would be useful to either build models for many of the MMP protiens and combine them to find compounds that will bind selectively or combine all the data into a multi-label classification problem.
+There are 24 MMPs, some of which inhibit cancer and some that promote cancer. This has been an issue in previous attempts to use MMP inhibitors for cancer treatment; they weren't specific to the MMPs that promote cancer, so they affect both the good and bad MMPs with no net effect on the cancer progression. Thus, future drug candidates need to be specific against the MMPs that promote cancer. It would be useful to either build models for many of the MMP protiens and combine them to find compounds that will bind selectively or combine all the data into a multi-label classification problem.
