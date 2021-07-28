@@ -67,10 +67,13 @@ if st.sidebar.button('Predict'):
     #st.write(desc_subset.shape)
 
     make_pred(desc_subset)
-
-    img=Draw.MolsToGridImage(load_data[0],molsPerRow=4,subImgSize=(200,200))
+    
+    st.header('Molecular Structure of Inputed Data')
+    mol_list = [Chem.MolFromSmiles(smiles) for smiles in load_data[0]]
+    img = Draw.MolsToGridImage(mol_list)
     img.save('images/structures.png')
-    image = Image.open('images/structures.png')     
+    image = Image.open('images/structures.png') 
+    st.image(image)    
 
 
 else: 
